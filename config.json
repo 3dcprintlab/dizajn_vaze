@@ -1,0 +1,24 @@
+{
+  "email": "tvoj@email.hr",
+  "boje": [
+    "Bijela #f2f0ea",
+    "Crna #2a2a2c",
+    "Siva #8e949a",
+    "Crvena #b3282d",
+    "Plava #2f5fa8",
+    "Zelena #3f7d4e"
+  ],
+  "cijene": {
+    "filament": 20,
+    "sati": 5,
+    "ambalaza": 0.5,
+    "postarina": 4,
+    "rad": 2,
+    "struja": 0.15,
+    "snaga": 0.1,
+    "amort": 0.15,
+    "marza": 300,
+    "marzaNacin": "dodatak",
+    "gustoca": 1.24
+  }
+}
