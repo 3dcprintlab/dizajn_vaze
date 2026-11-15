@@ -1,4 +1,5 @@
 {
+
   "email": "3dcprint.lab@gmail.com",
   "boje": [
    "Bijela #f2f0ea",
@@ -8,7 +9,7 @@
     "Caramel #FFD59A",
     "Dark Brown #654321"
   ],
-  "cijene": {
+ "cijene": {
     "filament": 15,
     "sati": 4,
     "ambalaza": 0.5,
@@ -20,10 +21,10 @@
     "marza": 300,
     "marzaNacin": "mnozitelj",
     "gustoca": 1.24
-  }
-},
+  },
   "vlasnik": {
     "salt": "bf5bacb4a490bd9524d7c3435b422f53",
     "v": "008438b190d41bf1a0aca09bd609daae73eab57346d6109fda023feecdfedf32"
   }
 }
+
