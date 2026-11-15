@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="hr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
+<title>Nova lozinka vlasnika</title>
+<style>:root{color-scheme:dark}body{margin:0;background:#141a18;color:#efe6d6;font:16px/1.4 system-ui,sans-serif;padding:20px}main{max-width:520px;margin:0 auto}
+h1{font:600 22px Georgia,serif;margin:0 0 6px}p{color:#9db0a2}input,textarea{width:100%;box-sizing:border-box;background:#0c100f;color:#efe6d6;border:1px solid #33423a;border-radius:8px;padding:10px;font:inherit;margin:6px 0}
+button{font:inherit;border:1px solid #33423a;background:transparent;color:#efe6d6;border-radius:8px;padding:9px 13px;cursor:pointer;margin:4px 6px 4px 0}button.go{background:#e0906e;color:#2b140b;border-color:#e0906e;font-weight:600}
+.m{color:#e0906e;min-height:22px}</style></head><body><main>
+<h1>Nova lozinka vlasnika</h1>
+<p>Ovaj alat samo izračuna redak za <b>config.json</b>. Ne daje pristup ničemu i sve radi u tvom pregledniku, lozinka se nikamo ne šalje.</p>
+<label for="pw">Nova lozinka (najmanje 12 znakova)</label><input id="pw" type="password" autocomplete="new-password">
+<button id="gen">Predloži jaku</button><button class="go" id="mk">Napravi redak</button>
+<div class="m" id="msg"></div><textarea id="out" rows="6" readonly hidden></textarea><button id="cp" hidden>Kopiraj</button>
+<p>Zalijepi redak u <b>config.json</b> umjesto starog odjeljka <code>"vlasnik"</code> i spremi na GitHubu. Nova lozinka vrijedi nakon par minuta.</p>
+</main><script>
+const $=i=>document.getElementById(i),hex=u=>[...u].map(b=>b.toString(16).padStart(2,'0')).join(''),unhex=h=>Uint8Array.from(h.match(/../g).map(x=>parseInt(x,16)));
+async function kdf(pw,salt){const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);return hex(new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2',salt:unhex(salt),iterations:210000,hash:'SHA-256'},km,256)))}
+async function sha256(h){return hex(new Uint8Array(await crypto.subtle.digest('SHA-256',unhex(h))))}
+$('gen').onclick=()=>{const A='abcdefghjkmnpqrstuvwxyz23456789',u=crypto.getRandomValues(new Uint8Array(20));$('pw').type='text';$('pw').value=[...u].map(b=>A[b%A.length]).join('').replace(/(.{5})(?=.)/g,'$1-')};
+$('mk').onclick=async()=>{const pw=$('pw').value;if(pw.length<12){$('msg').textContent='Lozinka treba imati najmanje 12 znakova.';return}
+ if(!window.crypto||!crypto.subtle){$('msg').textContent='Otvori ovu stranicu preko https adrese.';return}
+ $('msg').textContent='Računam…';const salt=hex(crypto.getRandomValues(new Uint8Array(16))),K=await kdf(pw,salt),V=await sha256(K);
+ $('out').value='  "vlasnik": {\n    "salt": "'+salt+'",\n    "v": "'+V+'"\n  }';$('out').hidden=false;$('cp').hidden=false;$('msg').textContent='Gotovo. Zapamti lozinku, ne može se povratiti.'};
+$('cp').onclick=()=>{$('out').select();try{navigator.clipboard.writeText($('out').value)}catch(e){document.execCommand('copy')}};
+</script></body></html>
